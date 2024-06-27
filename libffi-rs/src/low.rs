@@ -339,6 +339,9 @@ pub unsafe fn prep_cif_var(
 ///
 /// assert_eq!(9, result);
 /// ```
+///
+/// # Safety
+/// All the parameters must be valid and match the argument types.
 pub unsafe fn call<R>(cif: *mut ffi_cif, fun: CodePtr, args: *mut *mut c_void) -> R {
     let mut result = mem::MaybeUninit::<R>::uninit();
     raw::ffi_call(
@@ -397,6 +400,9 @@ pub fn closure_alloc() -> (*mut ffi_closure, CodePtr) {
 ///     closure_free(closure_handle);
 /// }
 /// ```
+///
+/// # Safety
+/// The closure pointer must be valid.
 pub unsafe fn closure_free(closure: *mut ffi_closure) {
     raw::ffi_closure_free(closure as *mut c_void);
 }

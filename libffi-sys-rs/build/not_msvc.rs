@@ -108,7 +108,7 @@ pub fn configure_libffi(prefix: PathBuf, build_dir: &Path) {
         command.env(k, v);
     }
 
-    command.current_dir(&build_dir);
+    command.current_dir(build_dir);
 
     if cfg!(windows) {
         // When using MSYS2, OUT_DIR will be a Windows like path such as
@@ -123,7 +123,7 @@ pub fn configure_libffi(prefix: PathBuf, build_dir: &Path) {
             .to_str()
             .unwrap()
             .replace(":\\", "/")
-            .replace("\\", "/");
+            .replace('\\', "/");
 
         msys_prefix.insert(0, '/');
 

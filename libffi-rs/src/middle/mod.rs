@@ -430,7 +430,7 @@ mod test {
 
     #[test]
     fn call() {
-        let cif = Cif::new(vec![Type::i64(), Type::i64()].into_iter(), Type::i64());
+        let cif = Cif::new(vec![Type::i64(), Type::i64()], Type::i64());
         let f = |m: i64, n: i64| -> i64 {
             unsafe { cif.call(CodePtr(add_it as *mut c_void), &[arg(&m), arg(&n)]) }
         };
@@ -446,7 +446,7 @@ mod test {
 
     #[test]
     fn closure() {
-        let cif = Cif::new(vec![Type::u64()].into_iter(), Type::u64());
+        let cif = Cif::new(vec![Type::u64()], Type::u64());
         let env: u64 = 5;
         let closure = Closure::new(cif, callback, &env);
 
@@ -468,7 +468,7 @@ mod test {
 
     #[test]
     fn rust_lambda() {
-        let cif = Cif::new(vec![Type::u64(), Type::u64()].into_iter(), Type::u64());
+        let cif = Cif::new(vec![Type::u64(), Type::u64()], Type::u64());
         let env = |x: u64, y: u64| x + y;
         let closure = Closure::new(cif, callback2, &env);
 
@@ -500,8 +500,7 @@ mod test {
                     Type::i64(),
                 ]),
                 Type::u64(),
-            ]
-            .into_iter(),
+            ],
             Type::u64(),
         );
         let clone_cif = cif.clone();

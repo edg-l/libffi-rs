@@ -74,6 +74,9 @@ pub fn arg<T: super::CType>(arg: &T) -> Arg {
 ///
 /// assert!((result - 5f32).abs() < 0.0001);
 /// ```
+///
+/// # Safety
+/// Must ensure all the arguments and function pointer are valid and their signature matches.
 pub unsafe fn call<R: super::CType>(fun: CodePtr, args: &[Arg]) -> R {
     let types = args.iter().map(|arg| arg.type_.clone());
     let cif = middle::Cif::new(types, R::reify().into_middle());

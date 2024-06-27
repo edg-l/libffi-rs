@@ -119,13 +119,13 @@ pub struct ffi_cif {
     pub is_variadic: c_uint,
     #[cfg(all(target_arch = "aarch64", target_vendor = "apple"))]
     pub aarch64_nfixedargs: c_uint,
-    #[cfg(all(target_arch = "arm"))]
+    #[cfg(target_arch = "arm")]
     pub vfp_used: c_int,
-    #[cfg(all(target_arch = "arm"))]
+    #[cfg(target_arch = "arm")]
     pub vfp_reg_free: c_ushort,
-    #[cfg(all(target_arch = "arm"))]
+    #[cfg(target_arch = "arm")]
     pub vfp_nargs: c_ushort,
-    #[cfg(all(target_arch = "arm"))]
+    #[cfg(target_arch = "arm")]
     pub vfp_args: [c_schar; 16],
     #[cfg(any(target_arch = "powerpc", target_arch = "powerpc64"))]
     pub nfixedargs: c_uint,
@@ -133,9 +133,9 @@ pub struct ffi_cif {
     pub riscv_nfixedargs: c_uint,
     #[cfg(any(target_arch = "riscv", target_arch = "riscv64"))]
     pub riscv_unused: c_uint,
-    #[cfg(all(target_arch = "loongarch64"))]
+    #[cfg(target_arch = "loongarch64")]
     pub loongarch_nfixedargs: c_uint,
-    #[cfg(all(target_arch = "loongarch64"))]
+    #[cfg(target_arch = "loongarch64")]
     pub loongarch_unused: c_uint,
     #[cfg(any(
         target_arch = "mips",
@@ -551,6 +551,8 @@ extern "C" {
 
 #[cfg(test)]
 mod test {
+    use std::ptr::addr_of_mut;
+
     use super::*;
 
     extern "C" fn add(x: u64, y: u64) -> u64 {
@@ -562,13 +564,13 @@ mod test {
         unsafe {
             let mut cif: ffi_cif = Default::default();
             let mut arg_types: Vec<*mut ffi_type> =
-                vec![&mut ffi_type_uint64, &mut ffi_type_uint64];
+                vec![addr_of_mut!(ffi_type_uint64), addr_of_mut!(ffi_type_uint64)];
 
             let prep_status = ffi_prep_cif(
                 &mut cif,
                 ffi_abi_FFI_DEFAULT_ABI,
                 2,
-                &mut ffi_type_uint64,
+                addr_of_mut!(ffi_type_uint64),
                 arg_types.as_mut_ptr(),
             );
 
